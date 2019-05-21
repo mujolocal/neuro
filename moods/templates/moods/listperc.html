@@ -1,11 +1,10 @@
 {% block content %}
-  <h2>User Moods and Streaks</h2>
+  <h1>User Moods and Streaks</h1>
     {% csrf_token %}
-    {{ show_score }}
+    <h2>{{ show_score }}</h2>
     
-    {{ latest_streak }}
+    <h3>Latest Streak: {{ latest_streak }}</h3>
     {% for mood in moods %}
-<h2>
 <p>{{ mood.mood }}</p>
 {% endfor %}
     

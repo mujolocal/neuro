@@ -36,15 +36,15 @@ class MoodCreateViewset(generics.CreateAPIView):
 def list_percent_view(request):
     user = request.user
     latest_streaks = getlateststreak()
-    cutoff = fifty_percent(latest_streaks)
+    
     if isinstance(user.pk,int):
         moods =  Mood.objects.filter(person=user.pk)
-        print(moods)
-        # show_score = 
+        cutoff = fifty_percent(latest_streaks)
+        print("cutoffis",cutoff)
         html_dict = {
+        "cutoff":cutoff,
         "moods":moods,
-        "show_score":True if latest_streaks[user.username] >= cutoff else False,
-        "score":percentage(number=latest_streaks[user.username] ,num_list=list(latest_streaks.values())),
+        "show_score":"Congrats your streak is in the top {} % ".format(percentage(number=latest_streaks[user.username] ,num_list=list(latest_streaks.values()))) if latest_streaks[user.username] > cutoff else "",
         "latest_streak":latest_streaks[user.username]
         }
         return  render(request, "moods/listperc.html" , html_dict)
@@ -65,6 +65,7 @@ def getlateststreak():
 
 def fifty_percent(streak_dict:dict):
     values = list(streak_dict.values())
+    
     print(values)
     # values = streak_dict.values().sort()
     halfsize = math.ceil(len(values)/2)
